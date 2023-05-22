@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tedu.dao.SongerMapper">
+
+
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.tedu.model.Songer">
+    <result column="INTRO" jdbcType="LONGVARCHAR" property="intro" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    SRID, TID, SRNAME, AREA, PIC, IS_HOT
+  </sql>
+  <sql id="Blob_Column_List">
+    INTRO
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from songer
+    where SRID = #{srid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from songer
+    where SRID = #{srid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tedu.model.Songer">
+    insert into songer (SRID, TID, SRNAME, 
+      AREA, PIC, IS_HOT, INTRO
+      )
+    values (#{srid,jdbcType=INTEGER}, #{tid,jdbcType=INTEGER}, #{srname,jdbcType=VARCHAR}, 
+      #{area,jdbcType=VARCHAR}, #{pic,jdbcType=VARCHAR}, #{isHot,jdbcType=INTEGER}, #{intro,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+<!--  <insert id="insertSelective" parameterType="com.tedu.model.Songer">-->
+<!--    insert into songer-->
+<!--    <trim prefix="(" suffix=")" suffixOverrides=",">-->
+<!--      <if test="srid != null">-->
+<!--        SRID,-->
+<!--      </if>-->
+<!--      <if test="tid != null">-->
+<!--        TID,-->
+<!--      </if>-->
+<!--      <if test="srname != null">-->
+<!--        SRNAME,-->
+<!--      </if>-->
+<!--      <if test="area != null">-->
+<!--        AREA,-->
+<!--      </if>-->
+<!--      <if test="pic != null">-->
+<!--        PIC,-->
+<!--      </if>-->
+<!--      <if test="isHot != null">-->
+<!--        IS_HOT,-->
+<!--      </if>-->
+<!--      <if test="intro != null">-->
+<!--        INTRO,-->
+<!--      </if>-->
+<!--    </trim>-->
+<!--    <trim prefix="values (" suffix=")" suffixOverrides=",">-->
+<!--      <if test="srid != null">-->
+<!--        #{srid,jdbcType=INTEGER},-->
+<!--      </if>-->
+<!--      <if test="tid != null">-->
+<!--        #{tid,jdbcType=INTEGER},-->
+<!--      </if>-->
+<!--      <if test="srname != null">-->
+<!--        #{srname,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--      <if test="area != null">-->
+<!--        #{area,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--      <if test="pic != null">-->
+<!--        #{pic,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--      <if test="isHot != null">-->
+<!--        #{isHot,jdbcType=INTEGER},-->
+<!--      </if>-->
+<!--      <if test="intro != null">-->
+<!--        #{intro,jdbcType=LONGVARCHAR},-->
+<!--      </if>-->
+<!--    </trim>-->
+<!--  </insert>-->
+  <update id="updateByPrimaryKeySelective" parameterType="com.tedu.model.Songer">
+    update songer
+    <set>
+      <if test="tid != null">
+        TID = #{tid,jdbcType=INTEGER},
+      </if>
+      <if test="srname != null">
+        SRNAME = #{srname,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null">
+        AREA = #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="pic != null">
+        PIC = #{pic,jdbcType=VARCHAR},
+      </if>
+      <if test="isHot != null">
+        IS_HOT = #{isHot,jdbcType=INTEGER},
+      </if>
+      <if test="intro != null">
+        INTRO = #{intro,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where SRID = #{srid,jdbcType=INTEGER}
+  </update>
+<!--  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.tedu.model.Songer">-->
+<!--    update songer-->
+<!--    set TID = #{tid,jdbcType=INTEGER},-->
+<!--      SRNAME = #{srname,jdbcType=VARCHAR},-->
+<!--      AREA = #{area,jdbcType=VARCHAR},-->
+<!--      PIC = #{pic,jdbcType=VARCHAR},-->
+<!--      IS_HOT = #{isHot,jdbcType=INTEGER},-->
+<!--      INTRO = #{intro,jdbcType=LONGVARCHAR}-->
+<!--    where SRID = #{srid,jdbcType=INTEGER}-->
+<!--  </update>-->
+<!--  <update id="updateByPrimaryKey" parameterType="com.tedu.model.Songer">-->
+<!--    update songer-->
+<!--    set TID = #{tid,jdbcType=INTEGER},-->
+<!--      SRNAME = #{srname,jdbcType=VARCHAR},-->
+<!--      AREA = #{area,jdbcType=VARCHAR},-->
+<!--      PIC = #{pic,jdbcType=VARCHAR},-->
+<!--      IS_HOT = #{isHot,jdbcType=INTEGER}-->
+<!--    where SRID = #{srid,jdbcType=INTEGER}-->
+<!--  </update>-->
+
+    <select id="selectObjectAll" resultMap="BaseResultMap">
+             select * from songer
+    </select>
+  <resultMap id="BaseResultMap" type="com.tedu.model.Songer">
+    <id column="SRID" jdbcType="INTEGER" property="srid" />
+    <result column="TID" jdbcType="INTEGER" property="tid" />
+    <result column="SRNAME" jdbcType="VARCHAR" property="srname" />
+    <result column="AREA" jdbcType="VARCHAR" property="area" />
+    <result column="PIC" jdbcType="VARCHAR" property="pic" />
+    <result column="IS_HOT" jdbcType="INTEGER" property="isHot" />
+  </resultMap>
+
+  <resultMap id="BaseResultMapRM" type="com.tedu.model.Songer" extends="BaseResultMap">
+    <!--有关于mtype流派的映射字段-->
+    <association property="mtype"  javaType="com.tedu.model.Mtype"  resultMap="com.tedu.dao.MtypeMapper.BaseResultMap"></association>
+  </resultMap>
+
+  <select id="selectByCondition" parameterType="com.tedu.query.SongerQuery" resultMap="BaseResultMapRM">
+--     SELECT * FROM songer s LEFT JOIN mtype  m ON s.tid=m.tid WHERE s.srname LIKE '%赵%' AND s.area LIKE '%大陆%' AND s.tid=1;
+    SELECT
+    *
+    FROM
+    songer s
+    LEFT JOIN mtype m ON s.tid=m.tid
+    LEFT JOIN songer sr ON s.rid=sr.rid
+    LEFT JOIN album a ON s.aid=a.aid
+    <where>
+      <if test="srname != null and srname != ''">
+        s.SRNAME LIKE '%${srname}%'
+      </if>
+      <if test="area != null and area != ''">
+        AND s.AREA LIKE '%${area}%'
+      </if>
+      <if test="tid != null">
+        AND s.TID = #{tid}
+      </if>
+      <if test="srid != null" >
+        and s.SRID = #{srid}
+      </if>
+      <if test="aid != null" >
+        and s.AID = #{aid}
+      </if>
+      <if test="isHot != null">
+        AND s.IS_HOT = #{isHot}
+      </if>
+      <if test="isNew != null">
+        AND s.IS_NEW = #{isNew}
+      </if>
+    </where>
+    LIMIT #{startNum}, #{pageSize}
+  </select>
+
+  <select id="selectByConditionCount" parameterType="com.tedu.query.SongerQuery" resultType="java.lang.Integer">
+    SELECT count(*)  FROM songer  s
+    LEFT JOIN mtype m ON s.tid=m.tid
+    LEFT JOIN songer sr ON s.rid=sr.rid
+    LEFT JOIN album a ON s.aid=a.aid
+    <where>
+      <if test="srname != null and srname != ''">
+        s.SRNAME LIKE '%${srname}%'
+      </if>
+      <if test="area != null and area != ''">
+        AND s.AREA LIKE '%${area}%'
+      </if>
+      <if test="tid != null">
+        AND s.TID = #{tid}
+      </if>
+      <if test="srid != null" >
+        and s.SRID = #{srid}
+      </if>
+      <if test="aid != null" >
+        and s.AID = #{aid}
+      </if>
+      <if test="isHot != null">
+        AND s.IS_HOT = #{isHot}
+      </if>
+      <if test="isNew != null">
+        AND s.IS_NEW = #{isNew}
+      </if>
+    </where>
+  </select>
+
+
+</mapper>
